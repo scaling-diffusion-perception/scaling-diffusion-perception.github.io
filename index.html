@@ -8,21 +8,53 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="container">
-        <h1>Scaling Properties of Diffusion Models For Perceptual Tasks</h1>
-        <div class="authors">
-            <p>Rahul Ravishankar* &nbsp; | &nbsp; Zeeshan Patel* &nbsp; | &nbsp; Jathushan Rajasegaran &nbsp; | &nbsp; Jitendra Malik</p>
-            <p>University of California, Berkeley</p>
-        </div>
-        <div class="buttons">
-            <button onclick="window.location.href='#'">Paper</button>
-            <button onclick="window.location.href='#'">Code</button>
-        </div>
-        <div class="abstract">
-            <p>
-                In this paper, we argue that iterative computation with diffusion models offers a powerful paradigm for not only generation but also visual perception tasks. We unify tasks such as depth estimation, optical flow, and segmentation under image-to-image translation, and show how diffusion models benefit from scaling training and test-time compute for these perception tasks. Through a careful analysis of these scaling behaviors, we present various techniques to efficiently train diffusion models for visual perception tasks. Our models achieve improved or comparable performance to state-of-the-art methods using significantly less data and compute.
-            </p>
+
+    <!-- Title Section -->
+    <div id="title_slide">
+        <div class="title_center">
+            <h1>Scaling Properties of Diffusion Models For Perceptual Tasks</h1>
         </div>
     </div>
+
+    <!-- Author Section -->
+    <div class="author-container-1">
+        <div class="grid-item"><a href="">Rahul Ravishankar*</a></div>
+        <div class="grid-item"><a href="https://zeeshanp.me">Zeeshan Patel*</a></div>
+        <div class="grid-item"><a href="https://brjathu.github.io">Jathushan Rajasegaran</a></div>
+        <div class="grid-item"><a href="https://people.eecs.berkeley.edu/~malik/">Jitendra Malik</a></div>
+    </div>    
+
+    <!-- Affiliation Section -->
+    <div class="berkeley">
+        <p>University of California, Berkeley</p>
+    </div>
+    <div class="equal_contribution">
+        <p>*Equal Contribution</p>
+    </div>
+
+    <div class="button-container">
+        <a href="#" class="button">Paper</a>
+        <a href="https://github.com/scaling-diffusion-perception/scaling-diffusion-perception" class="button">Code</a>
+    </div>
+
+    <!-- Abstract Section -->
+    <div id="abstract">
+        <p>
+            In this paper, we argue that iterative computation with diffusion models offers a powerful paradigm for not only generation but also visual perception tasks. We unify tasks such as depth estimation, optical flow, and segmentation under image-to-image translation, and show how diffusion models benefit from scaling training and test-time compute for these perception tasks. Through a careful analysis of these scaling behaviors, we present various techniques to efficiently train diffusion models for visual perception tasks. Our models achieve improved or comparable performance to state-of-the-art methods using significantly less data and compute.
+        </p>
+    </div>
+
+    <!-- Divider Line -->
+    <br />
+    <hr class="rounded">
+
+    <!-- Overview Section
+    <div id="overview">
+        <h1>Detailed Overview</h1>
+        <p>
+            Scaling properties of diffusion models allow us to bridge the gap between generative capabilities and visual perception tasks. By leveraging iterative computation, we can effectively address complex tasks in depth estimation, optical flow, and segmentation with reduced data and compute requirements.
+        </p>
+    </div> -->
+
 </body>
 </html>
