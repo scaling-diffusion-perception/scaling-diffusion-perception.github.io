@@ -62,10 +62,8 @@
             <div class="caption", style="text-align: justify;">
                 <p> Figure 1: <b>A Unified Framework</b>: We fine-tune a pre-trained Diffusion Model (DM) for visual
                     perception tasks. We take a RGB image, and a conditional image (i.e. next video frame, occlusion
-                    mask, etc.), along with the noised image of the ground truth prediction. Our model generates pre-
-                    dictions for various visual tasks such as monocular depth estimation, optical flow prediction, and
-                    amodal segmentation / completion, based on the conditional task embedding. We train a general-
-                    ist model that can perform all three tasks with exceptional performance.</p>
+                    mask, etc.), along with the noised image of the ground truth prediction. Our model generates predictions for various visual tasks such as monocular depth estimation, optical flow prediction, and
+                    amodal segmentation / completion, based on the conditional task embedding. We train a generalist model that can perform all three tasks with exceptional performance.</p>
             </div>
         </div>
     </div>
@@ -74,17 +72,104 @@
     <br />
     <hr class="rounded">
 
-    <!-- <div id="overview">
-        <h1>Scaling Diffusion Training</h1>
-        <p>
+    <div id="overview">
+        <h1>Scaling Training Compute</h1>
+        <p>We derive scaling laws for generative pre-training and fine-tuning of diffusion models for perceptual tasks. We pre-train DiT models of varied sizes on the ImageNet-1K dataset for class-conditional image generation. We observe clear power law scaling behavior as we increase the model size by increasing the hidden dimension and number of layers linearly.</p>
+        <!-- Image Container -->
+        <div class="image_container">
+            <img src="assets/scaling_pretraining.png" alt="Scaling Diffusion Pretraining" class="overview_image", style="width: 70%;">
+            <div class="caption", style="text-align: center; padding-left: 90px;">
+                <p>Figure 2: Scaling law for generative pre-training of DiT on ImageNet-1K dataset.</p>
+            </div>
+        </div>
+        <br />
+        <p>In addition to pre-training, we also derive scaling laws for fine-tuning on the downstream task of monocular depth estimation. We fine-tune the pre-trained DiT models by posing the depth estimation task as an image-to-image translation. We fine-tune our models for conditional denoising diffusion generation, training on the Hypersim dataset. We show that larger
+           dense DiT models predictably converge to a lower fine-tuning loss. We also observe a strong correlation between the fine-tuning loss scaling law and validation metric scaling laws.</p>
+        <!-- Image Container -->
+        <div class="image_container">
+            <img src="assets/scaling_finetuning.png" alt="Scaling Diffusion Fine-Tuning" class="overview_image", style="width: 100%;">
+            <div class="caption", style="text-align: center">
+                <p>Figure 3: Scaling laws for fine-tuning of DiT for monocular depth estimation with the Hypersim dataset.</p>
+            </div>
+        </div>
+        <p>Finally, we also explore the effect of scaling <u>pre-training compute</u>, <u>image resolution</u>, and <u>mixture-of-experts upcyling</u> during fine-tuning. These results can be found in our <a href="#", style="color:#53aecf">paper</a>.</p>
+    </div>
+
+    <!-- Divider Line -->
+    <br />
+    <hr class="rounded">
+
+    <div id="overview">
+        <h1>Scaling Test-Time Compute</h1>
+        <p>Scaling test-time compute has been explored for autoregressive LLMs to improve performance on long-horizon reasoning tasks.
+            Diffusion models by design allow efficient scaling of test-time compute. First, we can simply increase the number of denoising 
+            steps to increase the compute spent at inference. Since we are estimating deterministic outputs, we can then initialize multiple 
+            noise latents and ensemble the predictions to get a better estimation. Finally, we can also reallocate test-time compute for low 
+            and high frequency denoising by modifying the noise variance schedule.
         </p>
-    </div> -->
+        <!-- Image Container -->
+        <div class="image_container">
+            <img src="assets/scaling_inference.png" alt="Scaling Diffusion Test-Time Compute" class="overview_image", style="width: 100%;">
+            <div class="caption", style="text-align: center">
+                <p>Figure 4: Techniques to scale diffusion test-time compute for perceptual tasks.</p>
+            </div>
+        </div>
+        <br />
+        <p>The most natural way of scaling diffusion inference is by increasing denoising steps. Since the model
+            is trained to denoise the input at various timesteps, we can scale the number of diffusion denoising
+            steps at test-time to produce finer, more accurate predictions. This coarse-to-fine denoising paradigm
+            is also reflected in the generative case, and we can take advantage of it for the discriminative case
+            by increasing the number of denoising steps. We show a clear power law scaling behavior in depth estimation
+            validation metrics by simply increasing the number of diffusion sampling steps at test-time.</p>
+        <div class="image_container">
+            <img src="assets/scaling_inference_steps.png" alt="Scaling Diffusion Test-Time Compute (Steps)" class="overview_image", style="width: 100%;">
+            <div class="caption", style="text-align: center">
+                <p>Figure 5: Scaling law for increasing denoising steps on model fine-tuned for depth estimation.</p>
+            </div>
+        </div>
+        <p>
+        We can also exploit the fact that denoising different noise latents will generate different downstream predictions. We do so through a test-time ensembling approach in which we compute \( N \) forward passes per input sample and reduce the samples through an iterative optimization procedure. Since it
+        requires no ground truth, we scale ensembling by increasing \( N \) to utilize more test-time compute. We apply test-time ensembling with \( N ∈ [1, 2, 5, 10, 15, 20] \). We show that ensembling multiple predictions from distinct noise initializations displays power law scaling behavior for depth estimaton.
+        </p>
+        <div class="image_container">
+            <img src="assets/scaling_inference_ensembling.png" alt="Scaling Diffusion Test-Time Compute (ensembling)" class="overview_image", style="width: 100%;">
+            <div class="caption", style="text-align: center">
+                <p>Figure 6: Scaling law for test-time ensembling on model fine-tuned for depth estimation.</p>
+            </div>
+        </div>
+        <p>
+            Finally, we can scale test-time compute by increasing compute usage at different points of the denoising
+            process. In diffusion noise schedulers, we can define a schedule for the variance of the Gaussian
+            noise applied to the image over the total diffusion timesteps \( T \). Tuning the noise variance schedule
+            allows for reorganizing compute by allocating more compute to denoising steps earlier or later in
+            the noise schedule. We experiment with three different noise level settings for DDIM: linear, scaled
+            linear, and cosine. Cosine scheduling inearly declines from the middle of the corruption process, ensuring
+            the image is not corrupted too quickly as in linear schedules. Figure 7 shows that the cosine noise variance 
+            schedule outperforms linear schedules for DDIM on the depth estimation task under a fixed compute budget.
+        </p>
+        <div class="image_container">
+            <img src="assets/scaling_inference_noisevar.png" alt="Scaling Diffusion Test-Time Compute (ensembling)" class="overview_image", style="width: 100%;">
+            <div class="caption", style="text-align: center">
+                <p>Figure 7: Reallocating test-time compute with noise variance schedule on models fine-tuned for depth estimation.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Divider Line -->
+    <br />
+    <hr class="rounded">
+
+    <div id="overview">
+        <h1>Putting It All Together</h1>
+        <p>We apply our training and inference scaling techniques on the depth estimation, optical flow estimation, and amodal segementation tasks.</p>
+    </div>
 
     <br />
     <br />
     <br />
     <br />
 
-   
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script>
+
 </body>
 </html>
