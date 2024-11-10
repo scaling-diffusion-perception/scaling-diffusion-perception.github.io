@@ -48,13 +48,43 @@
     <br />
     <hr class="rounded">
 
-    <!-- Overview Section
+    <!-- Overview Section -->
     <div id="overview">
-        <h1>Detailed Overview</h1>
+        <h1>Scaling Diffusion Models For Perceptual Tasks</h1>
         <p>
-            Scaling properties of diffusion models allow us to bridge the gap between generative capabilities and visual perception tasks. By leveraging iterative computation, we can effectively address complex tasks in depth estimation, optical flow, and segmentation with reduced data and compute requirements.
+            We display the effectiveness of leveraging iterative feedback computation through diffusion models for visual perception tasks. We perform an in-depth study of train/test-time compute scaling laws across all layers
+            of the stack, including pre-training, fine-tuning, and diffusion inference. Specifically, we perform our study on the monocular depth estimation task. We show how to transfer the scaling laws derived for depth estimation to boost performance
+            on tasks such as optical flow or amodal segmentation for both training and inference. Finally, we apply all of our scaling strategies to efficiently train a generalist mixture-of-experts model on perception tasks, achieving state-of-the-art results across various benchmarks.
+        </p>
+        <!-- Image Container -->
+        <div class="image_container">
+            <img src="assets/method.png" alt="Scaling Diffusion Method" class="overview_image">
+            <div class="caption", style="text-align: justify;">
+                <p> Figure 1: <b>A Unified Framework</b>: We fine-tune a pre-trained Diffusion Model (DM) for visual
+                    perception tasks. We take a RGB image, and a conditional image (i.e. next video frame, occlusion
+                    mask, etc.), along with the noised image of the ground truth prediction. Our model generates pre-
+                    dictions for various visual tasks such as monocular depth estimation, optical flow prediction, and
+                    amodal segmentation / completion, based on the conditional task embedding. We train a general-
+                    ist model that can perform all three tasks with exceptional performance.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Divider Line -->
+    <br />
+    <hr class="rounded">
+
+    <!-- <div id="overview">
+        <h1>Scaling Diffusion Training</h1>
+        <p>
         </p>
     </div> -->
 
+    <br />
+    <br />
+    <br />
+    <br />
+
+   
 </body>
 </html>

@@ -694,6 +694,17 @@ hr.rounded {
     max-height: 100%;
 }
 
+.caption {
+    width: 100%;
+    max-width: 100%;
+    max-height: 100%;
+    position: relative;
+    font-size: 0.95vw;
+    color: #555555;
+    font-family: "Avenir Next", Helvetica, Arial, sans-serif;
+    text-align: center;
+}
+
 .scaling > .image_container > .caption {
     margin-left: 0.7vw;
     margin-bottom: 1.0vw;
